@@ -48,7 +48,7 @@ class NginxFull < Formula
   depends_on 'notice-nginx-module' if build.include? 'with-notice-module'
   depends_on 'subs-filter-nginx-module' if build.include? 'with-subs-filter-module'
   depends_on 'upload-nginx-module' if build.include? 'with-upload-module'
-  depends_on 'upstream-hash-module' if build.include? 'with-upstream-hash-module'
+  depends_on 'upstream-hash-nginx-module' if build.include? 'with-upstream-hash-module'
 
   skip_clean 'logs'
 
