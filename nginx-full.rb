@@ -49,6 +49,7 @@ class NginxFull < Formula
   depends_on 'subs-filter-nginx-module' if build.include? 'with-subs-filter-module'
   depends_on 'upload-nginx-module' if build.include? 'with-upload-module'
   depends_on 'upstream-hash-nginx-module' if build.include? 'with-upstream-hash-module'
+  depends_on 'consistent-hash-nginx-module' if build.include? 'with-consistent-hash-module'
 
   skip_clean 'logs'
 
@@ -78,7 +79,8 @@ class NginxFull < Formula
       ['with-mp4-h264-module',    nil,                           'Compile with support for HTTP MP4/H264 Module'],
       ['with-notice-module',      nil,                           'Compile with support for HTTP Notice Module'],
       ['with-subs-filter',        nil,                           'Compile with support for Substitutions Filter Module'],
-      ['with-upstream-hash-module',      nil,                           'Compile with support for Upstream Hash module'],
+      ['with-upstream-hash-module',      nil,                    'Compile with support for Upstream Hash module'],
+      ['with-consistent-hash-module',      nil,                    'Compile with support for Consistent Hash module'],
       # Internal modules
       ['with-webdav',            'with-http_dav_module',         'Compile with support for WebDAV module'],
       ['with-debug',             'with-debug',                   'Compile with support for debug log'],
@@ -248,6 +250,9 @@ class NginxFull < Formula
 
     # upstream hash module
     args << "--add-module=#{HOMEBREW_PREFIX}/share/upstream-hash-nginx-module" if build.include? "with-upstream-hash-module"
+
+    # consistent hash module
+    args << "--add-module=#{HOMEBREW_PREFIX}/share/consistent-hash-nginx-module" if build.include? "with-consistent-hash-module"
 
     if build.head?
       system "./auto/configure", *args
