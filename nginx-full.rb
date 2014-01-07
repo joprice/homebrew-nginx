@@ -24,64 +24,48 @@ class NginxFull < Formula
   depends_on 'libxml2' if build.with? 'xslt'
   depends_on 'libxslt' if build.with? 'xslt'
   depends_on 'gd' if build.with? 'image-filter'
-  # 3rd party modules
+
+  third_party = {
+    'lua' => 'Compile with support for LUA module',
+    'echo' => 'Compile with support for Echo Module',
+    'auth-digest' => 'Compile with support for Auth Digest Module',
+    'set-misc' => 'Compile with support for Set Misc Module',
+    'redis2' => 'Compile with support for Redis2 Module',
+    'array-var' => 'Compile with support for Array Var Module',
+    'accept-language' => 'Compile with support for Accept Language Module',
+    'accesskey' => 'Compile with support for HTTP Access Key Module',
+    'auth-ldap' => 'Compile with support for Auth LDAP Module',
+    'auth-pam' => 'Compile with support for Auth PAM Module',
+    'cache-purge' => 'Compile with support for Cache Purge Module',
+    'ctpp2' => 'Compile with support for CT++ Module',
+    'headers-more' => 'Compile with support for Headers More Module',
+    'tcp-proxy' => 'Compile with support for TCP proxy',
+    'eval' => 'Compile with support for Eval Module',
+    'fancyindex' => 'Compile with support for Fancy Index Module',
+    'mogilefs' => 'Compile with support for HTTP MogileFS Module',
+    'mp4-h264' => 'Compile with support for HTTP MP4/H264 Module',
+    'notice' => 'Compile with support for HTTP Notice Module',
+    'subs-filter' => 'Compile with support for Substitutions Filter Module',
+    'upload' => 'Compile with support for Upload module'
+    'dav-ext' => 'Compile with support for HTTP WebDav Extended Module',
+   }
+
+   # register third party flags
+   third_party.each { name, desc => 
+     depends_on "#{name}-nginx--module" if build.include? "with-#{name}-module" }
+   }
+
   depends_on 'ngx-devel-kit' if build.include? 'with-lua-module' or build.include? 'with-array-var-module'
-  depends_on 'lua-nginx-module' if build.include? 'with-lua-module'
-  depends_on 'echo-nginx-module' if build.include? 'with-echo-module'
-  depends_on 'auth-digest-nginx-module' if build.include? 'with-auth-digest'
-  depends_on 'set-misc-nginx-module' if build.include? 'with-set-misc-module'
-  depends_on 'redis2-nginx-module' if build.include? 'with-redis2-module'
-  depends_on 'array-var-nginx-module' if build.include? 'with-array-var-module'
-  depends_on 'accept-language-nginx-module' if build.include? 'with-accept-language'
-  depends_on 'accesskey-nginx-module' if build.include? 'with-accesskey-module'
-  depends_on 'auth-ldap-nginx-module' if build.include? 'with-auth-ldap'
-  depends_on 'auth-pam-nginx-module' if build.include? 'with-auth-pam'
-  depends_on 'cache-purge-nginx-module' if build.include? 'with-cache-purge'
-  depends_on 'ctpp2-nginx-module' if build.include? 'with-ctpp2-module'
-  depends_on 'headers-more-nginx-module' if build.include? 'with-headers-more-module'
-  depends_on 'tcp-proxy-nginx-module' if build.include? 'with-tcp-proxy-module'
-  depends_on 'dav-ext-nginx-module' if build.include? 'with-webdav'
-  depends_on 'eval-nginx-module' if build.include? 'with-eval-module'
-  depends_on 'fancyindex-nginx-module' if build.include? 'with-fancyindex-module'
-  depends_on 'mogilefs-nginx-module' if build.include? 'with-mogilefs-module'
-  depends_on 'mp4-h264-nginx-module' if build.include? 'with-mp4-h264-module'
-  depends_on 'notice-nginx-module' if build.include? 'with-notice-module'
-  depends_on 'subs-filter-nginx-module' if build.include? 'with-subs-filter-module'
-  depends_on 'upload-nginx-module' if build.include? 'with-upload-module'
-  depends_on 'upstream-hash-nginx-module' if build.include? 'with-upstream-hash-module'
-  depends_on 'consistent-hash-nginx-module' if build.include? 'with-consistent-hash-module'
 
   skip_clean 'logs'
 
   # Options
   def options_array
-    option_data = [
-      # 3rd party modules
-      ['with-passenger',          nil,                           'Compile with support for Phusion Passenger module'],
-      ['with-lua-module',         nil,                           'Compile with support for LUA module'],
-      ['with-echo-module',        nil,                           'Compile with support for Echo Module'],
-      ['with-auth-digest',        nil,                           'Compile with support for Auth Digest Module'],
-      ['with-set-misc-module',    nil,                           'Compile with support for Set Misc Module'],
-      ['with-redis2-module',      nil,                           'Compile with support for Redis2 Module'],
-      ['with-array-var-module',   nil,                           'Compile with support for Array Var Module'],
-      ['with-accept-language',    nil,                           'Compile with support for Accept Language Module'],
-      ['with-accesskey-module',   nil,                           'Compile with support for HTTP Access Key Module'],
-      ['with-auth-ldap',          nil,                           'Compile with support for Auth LDAP Module'],
-      ['with-auth-pam',           nil,                           'Compile with support for Auth PAM Module'],
-      ['with-cache-purge',        nil,                           'Compile with support for Cache Purge Module'],
-      ['with-ctpp2-module',       nil,                           'Compile with support for CT++ Module'],
-      ['with-headers-more-module',nil,                           'Compile with support for Headers More Module'],
-      ['with-tcp-proxy-module',   nil,                           'Compile with support for TCP proxy'],
-      ['with-dav-ext-module',     nil,                           'Compile with support for HTTP WebDav Extended Module'],
-      ['with-eval-module',        nil,                           'Compile with support for Eval Module'],
-      ['with-fancyindex-module',  nil,                           'Compile with support for Fancy Index Module'],
-      ['with-mogilefs-module',    nil,                           'Compile with support for HTTP MogileFS Module'],
-      ['with-mp4-h264-module',    nil,                           'Compile with support for HTTP MP4/H264 Module'],
-      ['with-notice-module',      nil,                           'Compile with support for HTTP Notice Module'],
-      ['with-subs-filter',        nil,                           'Compile with support for Substitutions Filter Module'],
-      ['with-upstream-hash-module',      nil,                    'Compile with support for Upstream Hash module'],
-      ['with-consistent-hash-module',      nil,                    'Compile with support for Consistent Hash module'],
+    third_party.collect { name, desc =>
+      ["with#{name}-module", nil, desc]
+    } + [
       # Internal modules
+      ['with-passenger',         nil,                           'Compile with support for Phusion Passenger module'],
       ['with-webdav',            'with-http_dav_module',         'Compile with support for WebDAV module'],
       ['with-debug',             'with-debug',                   'Compile with support for debug log'],
       ['with-spdy',              'with-http_spdy_module',        'Compile with support for SPDY module'],
@@ -105,9 +89,9 @@ class NginxFull < Formula
       ['with-pcre-jit',          'with-pcre-jit',                'Compile with support for JIT in PCRE'],
       ['with-auth-req',          'with-http_auth_request_module','Compile with support for HTTP Auth Request Module'],
       ['with-mail',              'with-mail',                    'Compile with support for Mail module'],
-      ['with-upload',            'with-upload_module',           'Compile with support for Upload module']
     ]
   end
+
   def options
     options = []
     options_array.each do |arr|
@@ -185,68 +169,10 @@ class NginxFull < Formula
       args << "--add-module=#{HOMEBREW_PREFIX}/share/lua-nginx-module"
     end
 
-    # Echo module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/echo-nginx-module" if build.include? 'with-echo-module'
-
-    # Set-Misc module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/set-misc-nginx-module" if build.include? 'with-set-misc-module'
-
-    # Redis2 module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/redis2-nginx-module" if build.include? 'with-redis2-module'
-
-    # Array Var module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/array-var-nginx-module" if build.include? 'with-array-var-module'
-
-    # Accept Language module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/accept-language-nginx-module" if build.include? "with-accept-language"
-
-    # HTTP Access Key module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/accesskey-nginx-module" if build.include? "with-accesskey-module"
-
-    # Auth LDAP Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/auth-ldap-nginx-module" if build.include? "with-auth-ldap"
-
-    # Auth PAM Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/auth-pam-nginx-module" if build.include? "with-auth-pam"
-
-    # Auth Digest Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/auth-digest-nginx-module" if build.include? "with-auth-digest"
-
-    # Cache Purge Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/cache-purge-nginx-module" if build.include? "with-cache-purge"
-
-    # CT++ Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/ctpp2-nginx-module" if build.include? "with-ctpp2-module"
-
-    # Headers More Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/headers-more-nginx-module" if build.include? "with-headers-more-module"
-
-    # TCP proxy Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/tcp-proxy-nginx-module" if build.include? "with-tcp-proxy-module"
-
-    # HTTP WebDav Ext Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/dav-ext-nginx-module" if build.include? "with-webdav"
-
-    # Eval Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/eval-nginx-module" if build.include? "with-eval-module"
-
-    # Fancy Index Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/fancyindex-nginx-module" if build.include? "with-fancyindex-module"
-
-    # HTTP MogileFS Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/mogilefs-nginx-module" if build.include? "with-mogilefs-module"
-
-    # HTTP MP4/H264 Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/mp4-h264-nginx-module" if build.include? "with-mp4-h264-module"
-
-    # HTTP Notice Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/notice-nginx-module" if build.include? "with-notice-module"
-
-    # Substitutions Filter Module
-    args << "--add-module=#{HOMEBREW_PREFIX}/share/subs-filter-nginx-module" if build.include? "with-subs-filter-module"
-
-    # file upload
-        args << "--add-module=#{HOMEBREW_PREFIX}/share/upload-nginx-module" if build.include? "with-upload-module"
+    # add third party flags
+    args += third_party.collect { name, desc =>
+      "--add-module=#{HOMEBREW_PREFIX}/share/#{m}-nginx-module" if build.include? "with-#{name}-module"
+    }
 
     # upstream hash module
     args << "--add-module=#{HOMEBREW_PREFIX}/share/upstream-hash-nginx-module" if build.include? "with-upstream-hash-module"
