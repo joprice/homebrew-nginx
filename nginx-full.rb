@@ -1,6 +1,34 @@
 require 'formula'
 
+module NginxConstants
+  THIRD_PARTY = {
+    'lua' => 'Compile with support for LUA module',
+    'echo' => 'Compile with support for Echo Module',
+    'auth-digest' => 'Compile with support for Auth Digest Module',
+    'set-misc' => 'Compile with support for Set Misc Module',
+    'redis2' => 'Compile with support for Redis2 Module',
+    'array-var' => 'Compile with support for Array Var Module',
+    'accept-language' => 'Compile with support for Accept Language Module',
+    'accesskey' => 'Compile with support for HTTP Access Key Module',
+    'auth-ldap' => 'Compile with support for Auth LDAP Module',
+    'auth-pam' => 'Compile with support for Auth PAM Module',
+    'cache-purge' => 'Compile with support for Cache Purge Module',
+    'ctpp2' => 'Compile with support for CT++ Module',
+    'headers-more' => 'Compile with support for Headers More Module',
+    'tcp-proxy' => 'Compile with support for TCP proxy',
+    'eval' => 'Compile with support for Eval Module',
+    'fancyindex' => 'Compile with support for Fancy Index Module',
+    'mogilefs' => 'Compile with support for HTTP MogileFS Module',
+    'mp4-h264' => 'Compile with support for HTTP MP4/H264 Module',
+    'notice' => 'Compile with support for HTTP Notice Module',
+    'subs-filter' => 'Compile with support for Substitutions Filter Module',
+    'upload' => 'Compile with support for Upload module',
+    'dav-ext' => 'Compile with support for HTTP WebDav Extended Module',
+   }
+end
+
 class NginxFull < Formula
+  include NginxConstants
 
   homepage 'http://nginx.org/'
   url 'http://nginx.org/download/nginx-1.4.4.tar.gz'
@@ -25,35 +53,10 @@ class NginxFull < Formula
   depends_on 'libxslt' if build.with? 'xslt'
   depends_on 'gd' if build.with? 'image-filter'
 
-  third_party = {
-    'lua' => 'Compile with support for LUA module',
-    'echo' => 'Compile with support for Echo Module',
-    'auth-digest' => 'Compile with support for Auth Digest Module',
-    'set-misc' => 'Compile with support for Set Misc Module',
-    'redis2' => 'Compile with support for Redis2 Module',
-    'array-var' => 'Compile with support for Array Var Module',
-    'accept-language' => 'Compile with support for Accept Language Module',
-    'accesskey' => 'Compile with support for HTTP Access Key Module',
-    'auth-ldap' => 'Compile with support for Auth LDAP Module',
-    'auth-pam' => 'Compile with support for Auth PAM Module',
-    'cache-purge' => 'Compile with support for Cache Purge Module',
-    'ctpp2' => 'Compile with support for CT++ Module',
-    'headers-more' => 'Compile with support for Headers More Module',
-    'tcp-proxy' => 'Compile with support for TCP proxy',
-    'eval' => 'Compile with support for Eval Module',
-    'fancyindex' => 'Compile with support for Fancy Index Module',
-    'mogilefs' => 'Compile with support for HTTP MogileFS Module',
-    'mp4-h264' => 'Compile with support for HTTP MP4/H264 Module',
-    'notice' => 'Compile with support for HTTP Notice Module',
-    'subs-filter' => 'Compile with support for Substitutions Filter Module',
-    'upload' => 'Compile with support for Upload module',
-    'dav-ext' => 'Compile with support for HTTP WebDav Extended Module',
-   }
-
-   # register third party flags
-   third_party.each { | name, desc |
-     depends_on "#{name}-nginx--module" if build.include? "with-#{name}-module"
-   }
+ # register third party flags
+ THIRD_PARTY.each { | name, desc |
+   depends_on "#{name}-nginx--module" if build.include? "with-#{name}-module"
+ }
 
   depends_on 'ngx-devel-kit' if build.include? 'with-lua-module' or build.include? 'with-array-var-module'
 
@@ -61,7 +64,7 @@ class NginxFull < Formula
 
   # Options
   def options_array
-    third_party.collect { | name, desc |
+    THIRD_PARTY.collect { | name, desc |
       ["with#{name}-module", nil, desc]
     } + [
       # Internal modules
@@ -170,7 +173,7 @@ class NginxFull < Formula
     end
 
     # add third party flags
-    args += third_party.collect { | name, desc |
+    args += THIRD_PARTY.collect { | name, desc |
       "--add-module=#{HOMEBREW_PREFIX}/share/#{m}-nginx-module" if build.include? "with-#{name}-module"
     }
 
