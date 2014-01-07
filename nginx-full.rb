@@ -46,13 +46,13 @@ class NginxFull < Formula
     'mp4-h264' => 'Compile with support for HTTP MP4/H264 Module',
     'notice' => 'Compile with support for HTTP Notice Module',
     'subs-filter' => 'Compile with support for Substitutions Filter Module',
-    'upload' => 'Compile with support for Upload module'
+    'upload' => 'Compile with support for Upload module',
     'dav-ext' => 'Compile with support for HTTP WebDav Extended Module',
    }
 
    # register third party flags
-   third_party.each { name, desc => 
-     depends_on "#{name}-nginx--module" if build.include? "with-#{name}-module" }
+   third_party.each { | name, desc |
+     depends_on "#{name}-nginx--module" if build.include? "with-#{name}-module"
    }
 
   depends_on 'ngx-devel-kit' if build.include? 'with-lua-module' or build.include? 'with-array-var-module'
@@ -61,7 +61,7 @@ class NginxFull < Formula
 
   # Options
   def options_array
-    third_party.collect { name, desc =>
+    third_party.collect { | name, desc |
       ["with#{name}-module", nil, desc]
     } + [
       # Internal modules
@@ -170,7 +170,7 @@ class NginxFull < Formula
     end
 
     # add third party flags
-    args += third_party.collect { name, desc =>
+    args += third_party.collect { | name, desc |
       "--add-module=#{HOMEBREW_PREFIX}/share/#{m}-nginx-module" if build.include? "with-#{name}-module"
     }
 
