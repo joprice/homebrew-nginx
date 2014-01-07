@@ -55,7 +55,7 @@ class NginxFull < Formula
 
  # register third party flags
  THIRD_PARTY.each { | name, desc |
-   depends_on "#{name}-nginx--module" if build.include? "with-#{name}-module"
+   depends_on "#{name}-nginx-module" if build.include? "with-#{name}-module"
  }
 
   depends_on 'ngx-devel-kit' if build.include? 'with-lua-module' or build.include? 'with-array-var-module'
@@ -65,7 +65,7 @@ class NginxFull < Formula
   # Options
   def options_array
     THIRD_PARTY.collect { | name, desc |
-      ["with#{name}-module", nil, desc]
+      ["with-#{name}-module", nil, desc]
     } + [
       # Internal modules
       ['with-passenger',         nil,                           'Compile with support for Phusion Passenger module'],
@@ -173,8 +173,10 @@ class NginxFull < Formula
     end
 
     # add third party flags
-    args += THIRD_PARTY.collect { | name, desc |
-      "--add-module=#{HOMEBREW_PREFIX}/share/#{m}-nginx-module" if build.include? "with-#{name}-module"
+    args += THIRD_PARTY.select { | name, desc |
+      build.with? "#{name}-module"
+    }.collect { | name, desc |
+      "--add-module=#{HOMEBREW_PREFIX}/share/#{name}-nginx-module" 
     }
 
     # upstream hash module
