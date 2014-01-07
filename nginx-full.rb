@@ -24,6 +24,8 @@ module NginxConstants
     'subs-filter' => 'Compile with support for Substitutions Filter Module',
     'upload' => 'Compile with support for Upload module',
     'dav-ext' => 'Compile with support for HTTP WebDav Extended Module',
+    'upstream-hash' => 'Compile with support for Upstream Hash Module',
+    'consistent-hash' => 'Compile with support for Consistent Hash Module',
    }
 end
 
