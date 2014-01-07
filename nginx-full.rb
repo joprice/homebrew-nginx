@@ -27,7 +27,7 @@ module NginxConstants
     'upstream-hash' => 'Compile with support for Upstream Hash Module',
     'healthcheck' => 'Compile with support for Healthcheck Module',
     'log-if' => 'Compile with support for Log-if Module',
-    'google' => 'Compile with support for Pagespeed',
+    'pagespeed' => 'Compile with support for Pagespeed',
    }
 end
 
