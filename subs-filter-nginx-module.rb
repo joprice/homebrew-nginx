@@ -8,7 +8,7 @@ class SubsFilterNginxModule < Formula
   version '0.6.3' # devel version without pcre depend
 
   def install
-    (share+'auth-digest-nginx-module').install Dir['*']
+    (share+'subs-filter-nginx-module').install Dir['*']
   end
 
 end
